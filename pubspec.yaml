@@ -1,0 +1,28 @@
+name: chuck_norris_facts
+description: This is a client for https://api.chucknorris.io/ :3.
+publish_to: 'none'
+version: 0.0.1
+
+environment:
+  sdk: '>=2.19.6 <3.0.0'
+
+dependencies:
+  colored_json: ^1.1.2
+  cv: ^0.2.11
+  dropdown_button2: ^2.1.0
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.1.2
+  flutter_custom_license_page: ^0.0.3
+  http: ^0.13.5
+  intl: ^0.18.1
+  mason_cli: ^0.1.0-dev.50
+  snapping_sheet: ^3.1.0
+
+dev_dependencies:
+  flutter_lints: ^2.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
