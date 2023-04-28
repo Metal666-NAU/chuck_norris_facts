@@ -4,6 +4,9 @@ on:
   push:
   workflow_dispatch:
 
+env:
+  ARTIFACT_NAME: chuck_norris_facts-v${{ github.run_number }}.zip
+
 jobs:
   build:
     runs-on: windows-latest
@@ -20,11 +23,14 @@ jobs:
       - run: powershell Move-Item -Path "build/windows/runner/Release"  -Destination "build/windows/runner/chuck_norris_facts"
       - uses: actions/upload-artifact@v3
         with:
-         name: chuck_norris_facts-v${{ github.run_number }}.zip
+         name: $ARTIFACT_NAME
          path: build/windows/runner
+      - uses: actions/download-artifact@v3
+        with:
+          name: $ARTIFACT_NAME
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: chuck_norris_facts-v${{ github.run_number }}.zip
+          artifacts: $ARTIFACT_NAME
           artifactErrorsFailBuild: true
           prerelease: ${{ github.ref != 'refs/heads/main' }}
           tag: v${{ github.run_number }}
