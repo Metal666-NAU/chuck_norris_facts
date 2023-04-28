@@ -16,3 +16,20 @@ jobs:
       - run: flutter --version
       - run: flutter config --enable-windows-desktop
       - run: flutter build windows
+      - uses: actions/upload-artifact@v3
+        with:
+         name: chuck_norris_facts
+         path: build/windows/runner/Release
+      - uses: thedoctor0/zip-release@0.7.1
+        with:
+          type: 'zip'
+          path: build/windows/runner/Release
+          filename: chuck_norris_facts-v${{ github.run_number }}.zip
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: chuck_norris_facts-v${{ github.run_number }}.zip
+          artifactErrorsFailBuild: true
+          prerelease: ${{ github.ref != 'refs/heads/main' }}
+          tag: v${{ github.run_number }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit: ${{ github.ref_name }}
