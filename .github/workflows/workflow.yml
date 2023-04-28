@@ -17,15 +17,11 @@ jobs:
       - run: flutter --version
       - run: flutter config --enable-windows-desktop
       - run: flutter build windows
+      - run: powershell Rename-Item -Path "build/windows/runner/Release"  -NewName "build/windows/runner/chuck_norris_facts"
       - uses: actions/upload-artifact@v3
         with:
-         name: chuck_norris_facts
-         path: build/windows/runner/Release
-      - uses: thedoctor0/zip-release@0.7.1
-        with:
-          type: 'zip'
-          path: build/windows/runner/Release
-          filename: chuck_norris_facts-v${{ github.run_number }}.zip
+         name: chuck_norris_facts-v${{ github.run_number }}.zip
+         path: build/windows/runner
       - uses: ncipollo/release-action@v1
         with:
           artifacts: chuck_norris_facts-v${{ github.run_number }}.zip
