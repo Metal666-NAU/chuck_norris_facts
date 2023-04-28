@@ -5,7 +5,9 @@ on:
   workflow_dispatch:
 
 env:
-  ARTIFACT_NAME: chuck_norris_facts-v${{ github.run_number }}.zip
+  APP_NAME: chuck_norris_facts
+  BUILD_PATH: build/windows/runner
+  ARTIFACT_NAME: $APP_NAME-v${{ github.run_number }}.zip
 
 jobs:
   build:
@@ -20,20 +22,20 @@ jobs:
       - run: flutter --version
       - run: flutter config --enable-windows-desktop
       - run: flutter build windows
-      - run: powershell Move-Item -Path "build/windows/runner/Release"  -Destination "build/windows/runner/chuck_norris_facts"
+      - run: powershell Move-Item -Path "$BUILD_PATH/Release"  -Destination "$BUILD_PATH/$APP_NAME"
       - uses: actions/upload-artifact@v3
         with:
          name: $ARTIFACT_NAME
-         path: build/windows/runner
+         path: $BUILD_PATH
       - uses: thedoctor0/zip-release@0.7.1
         with:
           type: 'zip'
-          directory: build/windows/runner
-          path: chuck_norris_facts
+          directory: $BUILD_PATH
+          path: $APP_NAME
           filename: $ARTIFACT_NAME.zip
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: $ARTIFACT_NAME
+          artifacts: $BUILD_PATH/$ARTIFACT_NAME.zip
           artifactErrorsFailBuild: true
           prerelease: ${{ github.ref != 'refs/heads/main' }}
           tag: v${{ github.run_number }}
