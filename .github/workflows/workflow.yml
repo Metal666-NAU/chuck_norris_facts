@@ -28,6 +28,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: $ARTIFACT_NAME
+      - run: ls -R
       - uses: ncipollo/release-action@v1
         with:
           artifacts: $ARTIFACT_NAME
