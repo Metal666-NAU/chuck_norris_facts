@@ -28,7 +28,7 @@ jobs:
       - uses: thedoctor0/zip-release@0.7.1
         with:
           type: 'zip'
-          direcotry: build/windows/runner
+          directory: build/windows/runner
           path: chuck_norris_facts
           filename: $ARTIFACT_NAME.zip
       - uses: ncipollo/release-action@v1
