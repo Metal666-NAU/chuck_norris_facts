@@ -17,7 +17,7 @@ jobs:
       - run: flutter --version
       - run: flutter config --enable-windows-desktop
       - run: flutter build windows
-      - run: powershell Rename-Item -Path "build/windows/runner/Release"  -NewName "build/windows/runner/chuck_norris_facts"
+      - run: powershell Move-Item -Path "build/windows/runner/Release"  -Destination "build/windows/runner/chuck_norris_facts"
       - uses: actions/upload-artifact@v3
         with:
          name: chuck_norris_facts-v${{ github.run_number }}.zip
