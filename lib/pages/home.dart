@@ -124,11 +124,14 @@ class HomePage extends StatelessWidget {
   Widget controlSection(
     final Widget Function(
       BuildContext context,
-      List<String> jokeCategories,
+      List<String?> jokeCategories,
       String? selectedJokeCategory,
     )
         jokeCategoryDropdown,
-    final Widget Function(BuildContext context) refreshJokeCategoriesButton,
+    final Widget Function(
+      BuildContext context,
+    )
+        refreshJokeCategoriesButton,
     final Widget Function(
       BuildContext context,
       String? selectedJokeCategory,
@@ -180,7 +183,7 @@ class HomePage extends StatelessWidget {
 
   Widget jokeCategoryDropdown(
     final BuildContext context,
-    final List<String> jokeCategories,
+    final List<String?> jokeCategories,
     final String? selectedJokeCategory,
   ) =>
       Theme(
@@ -205,10 +208,10 @@ class HomePage extends StatelessWidget {
           ),
           items: jokeCategories
               .map(
-                (final String jokeCategory) => DropdownMenuItem<String>(
+                (final String? jokeCategory) => DropdownMenuItem<String>(
                   value: jokeCategory,
                   child: Text(
-                    toBeginningOfSentenceCase(jokeCategory) ?? '[ERROR]',
+                    toBeginningOfSentenceCase(jokeCategory) ?? 'Random',
                   ),
                 ),
               )

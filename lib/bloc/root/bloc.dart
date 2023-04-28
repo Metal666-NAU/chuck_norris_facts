@@ -20,7 +20,10 @@ class Bloc extends flutter_bloc.Bloc<Event, State> {
 
       emit(
         state.copyWith(
-          jokeCategories: () => response.data,
+          jokeCategories: () => [
+            null,
+            ...response.data,
+          ],
           pastApiResponses: () => [
             response,
             ...state.pastApiResponses,

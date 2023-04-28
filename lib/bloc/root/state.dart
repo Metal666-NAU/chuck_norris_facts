@@ -1,7 +1,7 @@
 part of 'root.dart';
 
 class State {
-  final List<String> jokeCategories;
+  final List<String?> jokeCategories;
   final String? selectedJokeCategory;
   final List<ApiResponse> pastApiResponses;
   final bool isRetrievingJoke;
@@ -18,7 +18,7 @@ class State {
   });
 
   State copyWith({
-    final List<String> Function()? jokeCategories,
+    final List<String?> Function()? jokeCategories,
     final String? Function()? selectedJokeCategory,
     final List<ApiResponse> Function()? pastApiResponses,
     final bool Function()? isRetrievingJoke,
