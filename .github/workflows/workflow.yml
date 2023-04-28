@@ -35,7 +35,7 @@ jobs:
           filename: $ARTIFACT_NAME.zip
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: $BUILD_PATH/$ARTIFACT_NAME.zip
+          artifacts: build/windows/runner/chuck_norris_facts.zip
           artifactErrorsFailBuild: true
           prerelease: ${{ github.ref != 'refs/heads/main' }}
           tag: v${{ github.run_number }}
