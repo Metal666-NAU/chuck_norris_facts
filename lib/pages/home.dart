@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:snapping_sheet/snapping_sheet.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../bloc/root/root.dart' as root;
 import '../data/api/chuck_norris_api_repository.dart';
@@ -251,63 +252,122 @@ class HomePage extends StatelessWidget {
     final BuildContext context,
     final List<Joke> retrievedJokes,
     final Joke? expandedJoke,
-  ) =>
-      ExpansionPanelList(
-        expansionCallback: (final panelIndex, final isExpanded) => context
-            .read<root.Bloc>()
-            .add(root.JokeExpanded(panelIndex, isExpanded)),
-        children: retrievedJokes
-            .map(
-              (final Joke retrievedJoke) => ExpansionPanel(
-                isExpanded: retrievedJoke == expandedJoke,
-                canTapOnHeader: true,
-                backgroundColor: ElevationOverlay.applySurfaceTint(
-                  Theme.of(context).colorScheme.background,
-                  Theme.of(context).colorScheme.surfaceTint,
-                  0.5,
+  ) {
+    Widget expandedTextEntry(final String prefix, final String text) => Row(
+          children: [
+            Text(
+              prefix,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(width: 4),
+            SelectableText(text),
+          ],
+        );
+
+    return ExpansionPanelList(
+      expandedHeaderPadding: const EdgeInsets.symmetric(vertical: 4),
+      expansionCallback: (final panelIndex, final isExpanded) => context
+          .read<root.Bloc>()
+          .add(root.JokeExpanded(panelIndex, isExpanded)),
+      children: retrievedJokes
+          .map(
+            (final Joke retrievedJoke) => ExpansionPanel(
+              isExpanded: retrievedJoke == expandedJoke,
+              canTapOnHeader: true,
+              backgroundColor: ElevationOverlay.applySurfaceTint(
+                Theme.of(context).colorScheme.background,
+                Theme.of(context).colorScheme.surfaceTint,
+                0.5,
+              ),
+              headerBuilder: (final context, final isExpanded) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(retrievedJoke.value.v ?? '[no value]'),
+                    AnimatedContainer(
+                      height: isExpanded ? 40 : 0,
+                      duration: kThemeAnimationDuration,
+                      child: FittedBox(
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                TextButton.icon(
+                                  onPressed: () async =>
+                                      await Clipboard.setData(
+                                    ClipboardData(text: retrievedJoke.value.v),
+                                  ),
+                                  icon: const Icon(Icons.copy),
+                                  label: const Text('Copy'),
+                                ),
+                                TextButton.icon(
+                                  onPressed: () async => await _openNewPage(
+                                    context,
+                                    ApiResponseDetailsPage(
+                                      retrievedJoke.response,
+                                    ),
+                                  ),
+                                  icon: const Icon(Icons.code),
+                                  label: const Text('View raw'),
+                                ),
+                                TextButton.icon(
+                                  onPressed: retrievedJoke.url.isNull
+                                      ? null
+                                      : () async => await launchUrl(
+                                            Uri.parse(retrievedJoke.url.v!),
+                                          ),
+                                  icon: const Icon(Icons.open_in_new),
+                                  label: const Text('Open in browser'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-                headerBuilder: (final context, final isExpanded) => Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Text(retrievedJoke.value.v ?? '[no value]'),
+              ),
+              body: DecoratedBox(
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    ),
+                  ),
                 ),
-                body: Card(
+                child: Card(
                   child: Padding(
                     padding: const EdgeInsets.all(8),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TextButton.icon(
-                                onPressed: () async => await Clipboard.setData(
-                                  ClipboardData(text: retrievedJoke.value.v),
-                                ),
-                                icon: const Icon(Icons.copy),
-                                label: const Text('Copy'),
-                              ),
-                            ),
-                            Expanded(
-                              child: TextButton.icon(
-                                onPressed: () async => await _openNewPage(
-                                  context,
-                                  ApiResponseDetailsPage(
-                                    retrievedJoke.response,
-                                  ),
-                                ),
-                                icon: const Icon(Icons.open_in_new),
-                                label: const Text('View raw'),
-                              ),
-                            ),
-                          ],
-                        )
+                        expandedTextEntry(
+                          'Categories:',
+                          '[${(retrievedJoke.categories.isNull || retrievedJoke.categories.v!.isEmpty ? const [
+                              ''
+                            ] : retrievedJoke.categories.v!).reduce((final value, final element) => '$value, $element')}]',
+                        ),
+                        expandedTextEntry(
+                          'Created at:',
+                          retrievedJoke.createdAt.v.toString(),
+                        ),
+                        expandedTextEntry(
+                          'Updated at:',
+                          retrievedJoke.updatedAt.v.toString(),
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
-            )
-            .toList(),
-      );
+            ),
+          )
+          .toList(),
+    );
+  }
 
   Widget grabbingWidget(final BuildContext context) => Card(
         margin: const EdgeInsets.all(0),

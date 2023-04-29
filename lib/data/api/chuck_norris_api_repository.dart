@@ -94,16 +94,23 @@ abstract class ApiResponse {
 
 class Joke extends ApiResponseData {
   final categories = CvListField<String>('categories');
-  final createdAt = CvField<DateTime>('created_at');
+  final createdAt = CvField<String>('created_at');
   final iconUrl = CvField<String>('icon_url');
   final id = CvField<String>('id');
-  final updatedAt = CvField<DateTime>('updated_at');
+  final updatedAt = CvField<String>('updated_at');
   final url = CvField<String>('url');
   final value = CvField<String>('value');
 
   @override
-  List<CvField> get fields =>
-      [categories, createdAt, iconUrl, id, updatedAt, url, value];
+  List<CvField> get fields => [
+        categories,
+        createdAt,
+        iconUrl,
+        id,
+        updatedAt,
+        url,
+        value,
+      ];
 }
 
 abstract class ApiResponseData extends CvModelBase {
