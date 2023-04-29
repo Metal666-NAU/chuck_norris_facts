@@ -31,10 +31,11 @@ class ChuckNorrisApiRepository {
 
 class ChuckNorrisApi {
   static const String address = 'api.chucknorris.io';
-  static String logoPath = 'img/chucknorris_icon.png';
-  static String jokeCategoriesPath = 'jokes/categories';
-  static String randomJokePath = 'jokes/random';
+  static const String logoPath = 'img/chucknorris_icon.png';
+  static const String jokeCategoriesPath = 'jokes/categories';
+  static const String randomJokePath = 'jokes/random';
 
+  static Uri api() => Uri.https(address);
   static Uri logo() => Uri.https(address, logoPath);
   static Uri jokeCategories() => Uri.https(address, jokeCategoriesPath);
   static Uri randomJoke([final String? category]) => Uri.https(

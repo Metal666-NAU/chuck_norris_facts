@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 abstract class PageBase extends StatelessWidget {
   const PageBase({super.key});
 
-  Widget root(final Widget content) => Material(
-        child: Column(
+  Widget root(final Widget content) => Scaffold(
+        body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Builder(builder: closeButton),

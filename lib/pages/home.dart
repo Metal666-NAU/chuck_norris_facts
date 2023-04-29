@@ -10,8 +10,9 @@ import '../bloc/root/root.dart' as root;
 import '../data/api/chuck_norris_api_repository.dart';
 import 'home/api_response_details.dart';
 import 'home/info.dart';
+import 'page_mixin.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatelessWidget with PageMixin {
   static const double bottomSheetCollapsedHeight = 50;
   static const double bottomSheetDragAreaHeight = 35;
 
@@ -238,7 +239,7 @@ class HomePage extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: ElevatedButton.icon(
             icon: const Icon(Icons.search),
-            label: const Text('Gimme a joke!'),
+            label: const Text('One joke, please!'),
             onPressed: isRetrievingJoke
                 ? null
                 : () => context
@@ -295,10 +296,17 @@ class HomePage extends StatelessWidget {
                             Row(
                               children: [
                                 TextButton.icon(
-                                  onPressed: () async =>
-                                      await Clipboard.setData(
-                                    ClipboardData(text: retrievedJoke.value.v),
-                                  ),
+                                  onPressed: () async {
+                                    await Clipboard.setData(
+                                      ClipboardData(
+                                        text: retrievedJoke.value.v,
+                                      ),
+                                    );
+
+                                    if (context.mounted) {
+                                      showSnackbar(context, 'Joke copied!');
+                                    }
+                                  },
                                   icon: const Icon(Icons.copy),
                                   label: const Text('Copy'),
                                 ),

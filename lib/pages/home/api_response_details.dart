@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../data/api/chuck_norris_api_repository.dart';
+import '../page_mixin.dart';
 import 'page_base.dart';
 
-class ApiResponseDetailsPage extends PageBase {
+class ApiResponseDetailsPage extends PageBase with PageMixin {
   final ApiResponse apiResponse;
 
   const ApiResponseDetailsPage(this.apiResponse, {super.key});
@@ -23,14 +24,12 @@ class ApiResponseDetailsPage extends PageBase {
     final Widget Function(BuildContext context) dataSection,
   ) =>
       Builder(
-        builder: (final context) => Material(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              infoSection(context),
-              Expanded(child: dataSection(context)),
-            ],
-          ),
+        builder: (final context) => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            infoSection(context),
+            Expanded(child: dataSection(context)),
+          ],
         ),
       );
 
@@ -118,9 +117,15 @@ class ApiResponseDetailsPage extends PageBase {
         Padding(
           padding: const EdgeInsets.all(8),
           child: TextButton.icon(
-            onPressed: () async => await Clipboard.setData(
-              ClipboardData(text: apiResponse.rawData),
-            ),
+            onPressed: () async {
+              await Clipboard.setData(
+                ClipboardData(text: apiResponse.rawData),
+              );
+
+              if (context.mounted) {
+                showSnackbar(context, 'Response copied!');
+              }
+            },
             icon: const Icon(Icons.copy),
             label: const Text('Copy'),
           ),

@@ -1,3 +1,4 @@
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:cv/cv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +11,11 @@ void main() {
   registerCvConstructors();
 
   runApp(MainApp());
+
+  doWhenWindowReady(() {
+    appWindow.minSize = const Size(300, 350);
+    appWindow.alignment = Alignment.center;
+  });
 }
 
 void registerCvConstructors() {
