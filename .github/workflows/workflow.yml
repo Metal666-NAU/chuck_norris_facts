@@ -33,6 +33,7 @@ jobs:
           directory: build/windows/runner
           path: chuck_norris_facts
           filename: $ARTIFACT_NAME.zip
+      - run: ls -r
       - uses: ncipollo/release-action@v1
         with:
           artifacts: build/windows/runner/chuck_norris_facts.zip
