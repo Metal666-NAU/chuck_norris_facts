@@ -32,11 +32,11 @@ jobs:
           type: 'zip'
           directory: build/windows/runner
           path: chuck_norris_facts
-          filename: chuck_norris_facts.zip
+          filename: chuck_norris_facts-v${{ github.run_number }}.zip
       - run: ls -r
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: build/windows/runner/chuck_norris_facts.zip
+          artifacts: build/windows/runner/chuck_norris_facts-v${{ github.run_number }}.zip
           artifactErrorsFailBuild: true
           prerelease: ${{ github.ref != 'refs/heads/main' }}
           tag: v${{ github.run_number }}
